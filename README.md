@@ -58,6 +58,28 @@ set selection-clipboard clipboard
 ```
 Thanks to [geigi](https://github.com/geigi) (see [#5](https://github.com/zegervdv/homebrew-zathura/issues/5))
 
+If that does not work, try using the `STABLE` release instead of `--HEAD`.
+```sh
+brew unlink girara zathura --ignore-dependencies
+brew uninstall girara zathura --force --ignore-dependencies
+
+# install STABLE
+brew  install girara
+brew install zathura
+```
+For Poppler:
+```sh
+brew install zathura-pdf-poppler
+mkdir -p $(brew --prefix zathura)/lib/zathura
+ln -s $(brew --prefix zathura-pdf-poppler)/libpdf-poppler.dylib $(brew --prefix zathura)/lib/zathura/libpdf-poppler.dylib
+```
+For MuPDF:
+```sh
+brew install zathura-pdf-mupdf
+mkdir -p $(brew --prefix zathura)/lib/zathura
+ln -s $(brew --prefix zathura-pdf-mupdf)/libpdf-mupdf.dylib $(brew --prefix zathura)/lib/zathura/libpdf-mupdf.dylib
+```
+
 ### Operation not supported error
 
 If you are seeing errors like this:
