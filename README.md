@@ -17,7 +17,7 @@ brew install zathura --with-synctex
 ```
 
 ### Install and link one of the two plugins
-In order to render PDFs, `zathura` requires either `mupdf` or `poppler`. 
+In order to render PDFs, `zathura` requires either `mupdf` or `poppler`.
 
 For mupdf:
 ```sh
@@ -49,10 +49,10 @@ brew uninstall --ignore-dependencies --force girara
 brew uninstall zathura
 ```
 
-Optionally untap the repo 
+Optionally untap the repo
 
 ```sh
-brew unptap $(brew tap | grep zathura)
+brew untap $(brew tap | grep zathura)
 ```
 
 ## Roadmap
