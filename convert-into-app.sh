@@ -2,17 +2,12 @@
 
 echo "This script will convert the zathura binary into a macOS App"
 
-
-
 [ -f /opt/homebrew/bin/zathura ] || { echo "zathura not found at /opt/homebrew/bin/zathura"; exit 1; }
-
 
 echo "Creating /Applications/Zathura.app"
 mkdir -p /Applications/Zathura.app/Contents/MacOS
 mkdir -p /Applications/Zathura.app/Contents/Resources
-
 cp /opt/homebrew/bin/zathura /Applications/Zathura.app/Contents/MacOS/zathura
-
 touch /Applications/Zathura.app/Contents/Info.plist
 
 echo "<?xml version="1.0" encoding="UTF-8"?>
@@ -44,6 +39,5 @@ Now you can run the app by double clicking on it.
 
 Next steps:
 To change the icon, follow the README.md in the repo.
-
-You will notice that when Zathura opens, no file is showing. To open a file, type \`:open <path to file>\`. Pressing <Tab> will show some recent files that the viewerhas opened
+You will notice that when Zathura opens, no file is showing. To open a file, type \`:open <path to file>\` while within zathura, or \`zathura open example.pdf\` from the command line. Pressing <Tab> will show recent files that the viewer has opened
 EOF
