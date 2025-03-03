@@ -31,6 +31,9 @@ echo "<?xml version="1.0" encoding="UTF-8"?>
 </dict>
 </plist>" > /Applications/Zathura.app/Contents/Info.plist
 
+echo "Getting the icon"
+curl -o /Applications/Zathura.app/Contents/Resources/AppIcon.icns https://raw.githubusercontent.com/homebrew-zathura/homebrew-zathura/refs/heads/master/icon/zathura-brosasaki.icns
+
 echo "Making it executable"
 chmod +x /Applications/Zathura.app/Contents/MacOS/zathura
 
