@@ -21,8 +21,8 @@ class Zathura < Formula
   depends_on "gettext"
   depends_on "girara"
   depends_on "glib"
-  depends_on "json-glib"
   depends_on "intltool"
+  depends_on "json-glib"
   depends_on "libmagic"
   depends_on "synctex" => :optional
   on_macos do
