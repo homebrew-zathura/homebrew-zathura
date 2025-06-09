@@ -18,7 +18,7 @@ class ZathuraCb < Formula
   depends_on "zathura"
 
   def install
-    inreplace "meson.build", "zathura.get_pkgconfig_variable('plugindir')", "'#{prefix}'"
+    inreplace "meson.build", "zathura.get_variable(pkgconfig: 'plugindir')", "'#{prefix}'"
     mkdir "build" do
       system "meson", *std_meson_args, ".."
       system "ninja"
