@@ -1,5 +1,37 @@
+diff --git a/data/zsh-completion.in b/data/zsh-completion.in
+index fe621cb..bbe9d07 100644
+--- a/data/zsh-completion.in
++++ b/data/zsh-completion.in
+@@ -26,21 +26,21 @@ _arguments -C -s -S "$all_opts[@]" && ret=0
+ 
+ local PLUGIN
+ local -a exts
+-for PLUGIN in @PLUGINDIR@/lib*.so; do
++for PLUGIN in @PLUGINDIR@/lib*.dylib; do
+   case ${PLUGIN##*/} in
+-    libpdf-poppler.so)
++    libpdf-poppler.dylib)
+       exts+=( pdf PDF )
+       ;;
+-    libpdf-mupdf.so)
++    libpdf-mupdf.dylib)
+       exts+=( pdf PDF epub oxps )
+       ;;
+-    libps.so)
++    libps.dylib)
+       exts+=( ps eps epsi epsf )
+       ;;
+-    libdjvu.so)
++    libdjvu.dylib)
+       exts+=( djvu djv )
+       ;;
+-    libcb.so)
++    libcb.dylib)
+       exts+=( cb7 cbr cbz cbt rar zip 7z tar )
+       ;;
+   esac
 diff --git a/meson.build b/meson.build
-index a1300c7..006a492 100644
+index 0a76a47..a7010d5 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -67,10 +67,6 @@ defines = [
@@ -13,7 +45,7 @@ index a1300c7..006a492 100644
  # compile flags
  flags = [
    '-Werror=implicit-function-declaration',
-@@ -152,6 +148,15 @@ headers = files(
+@@ -150,6 +146,15 @@ headers = files(
  )
  headers += version_header
  
@@ -132,7 +164,7 @@ index 0000000..07365e6
 +
 +#endif /* MAC_INTEGRATION_H */
 diff --git a/zathura/main.c b/zathura/main.c
-index f326b4b..1ff0689 100644
+index 7b085be..bbec9ea 100644
 --- a/zathura/main.c
 +++ b/zathura/main.c
 @@ -1,7 +1,7 @@
