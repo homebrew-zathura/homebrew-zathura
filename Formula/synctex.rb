@@ -3,7 +3,7 @@ class Synctex < Formula
   homepage "https://github.com/jlaurens/synctex"
   url "https://github.com/jlaurens/synctex", using: :git, revision: "d37a5a59091b6a1bda387e68dd9431a7a750f419", branch: "2024"
   version "2024"
-  # sha256 "2905e22437f8609bb799c98009aab8bc34f9466c629871079d4c8bc6277be1a0"
+  # sha256 "a6571bf8cce8cff50dd5e29cbe78ae6f1c2c32d132604aa7ba11e4114c9dc981"
   license "MIT"
   head "https://github.com/jlaurens/synctex.git", branch: "main"
 
