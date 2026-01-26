@@ -10,7 +10,7 @@ brew tap homebrew-zathura/zathura
 
 ## Install zathura
 
-> ![NOTE]
+> [!NOTE]
 > If you want a comprehensive guide on installing zathura, check out [@ejmastnak](https://github.com/ejmastnak)'s guide [here](https://ejmastnak.com/tutorials/vim-latex/pdf-reader/#zathura-macos)
 
 Zathura uses a plugin based system for supported document types
@@ -30,7 +30,7 @@ one depends on the implementation and may change at any time.
 
 ### Install zathura
 
-> ![warn]
+> [!warning]
 > Installing zathura with `--HEAD` flag is deprecated and will not work. Please use the commands below.
 
 ```sh
