@@ -1,8 +1,8 @@
 class Zathura < Formula
   desc "PDF viewer"
   homepage "https://pwmt.org/projects/zathura/"
-  url "https://github.com/pwmt/zathura/archive/refs/tags/0.5.14.tar.gz"
-  sha256 "e7a6bdfe90ed2d7405c4aa8e35f72ba00eda8306ea0e3dda6c02d0edbb00ce6f"
+  url "https://github.com/pwmt/zathura/archive/refs/tags/0.5.11.tar.gz"
+  sha256 "32540747a6fe3c4189ec9d5de46a455862c88e11e969adb5bc0ce8f9b25b52d4"
   license "Zlib"
   head "https://github.com/pwmt/zathura.git", branch: "develop"
 
