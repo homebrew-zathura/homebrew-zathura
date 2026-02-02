@@ -26,12 +26,9 @@ jobs:
       - name: Install Homebrew Bundler RubyGems
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install-bundler-gems
-
-      - run: brew test-bot --only-cleanup-before
-
-      - run: brew test-bot --only-setup
-
+        
       - run: brew test-bot
+        if: github.event_name != 'pull_request'
 
       - run: brew test-bot --only-formulae --root-url=https://ghcr.io/v2/zegervdv/zathura
         if: github.event_name == 'pull_request'
