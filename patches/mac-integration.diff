@@ -3,7 +3,7 @@ index fe621cb..bbe9d07 100644
 --- a/data/zsh-completion.in
 +++ b/data/zsh-completion.in
 @@ -26,21 +26,21 @@ _arguments -C -s -S "$all_opts[@]" && ret=0
- 
+
  local PLUGIN
  local -a exts
 -for PLUGIN in @PLUGINDIR@/lib*.so; do
@@ -31,13 +31,13 @@ index fe621cb..bbe9d07 100644
        ;;
    esac
 diff --git a/meson.build b/meson.build
-index 0a76a47..a7010d5 100644
+index 9d52fc8..4c30f4b 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -67,10 +67,6 @@ defines = [
+@@ -74,10 +74,6 @@ defines = [
    '-D_DEFAULT_SOURCE',
  ]
- 
+
 -if host_machine.system() == 'darwin'
 -  defines += '-DGTKOSXAPPLICATION'
 -endif
@@ -45,10 +45,10 @@ index 0a76a47..a7010d5 100644
  # compile flags
  flags = [
    '-Werror=implicit-function-declaration',
-@@ -150,6 +146,15 @@ headers = files(
+@@ -168,6 +164,15 @@ headers = files(
  )
  headers += version_header
- 
+
 +if host_machine.system() == 'darwin'
 +  sources += files(
 +    'zathura/mac-integration.c',
@@ -60,7 +60,7 @@ index 0a76a47..a7010d5 100644
 +
  # zathura helper library
  libzathura = static_library('zathura',
-   sources,
+   sources + ['zathura/database-sqlite.c'],
 diff --git a/zathura/mac-integration.c b/zathura/mac-integration.c
 new file mode 100644
 index 0000000..5ff15fc
@@ -164,23 +164,23 @@ index 0000000..07365e6
 +
 +#endif /* MAC_INTEGRATION_H */
 diff --git a/zathura/main.c b/zathura/main.c
-index 7b085be..bbec9ea 100644
+index a439a78..7377272 100644
 --- a/zathura/main.c
 +++ b/zathura/main.c
 @@ -1,7 +1,7 @@
  /* SPDX-License-Identifier: Zlib */
- 
+
 -#ifdef GTKOSXAPPLICATION
 -#include <gtkosxapplication.h>
 +#ifdef MAC_INTEGRATION
 +#include "mac-integration.h"
  #endif
- 
- #include <girara/settings.h>
-@@ -282,17 +282,10 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
-     goto free_and_ret;
+
+ #include <girara-gtk/settings.h>
+@@ -283,17 +283,9 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
+	 return -1;
    }
- 
+
 -#ifdef GTKOSXAPPLICATION
 -  GtkosxApplication* zathuraApp = g_object_new(GTKOSX_TYPE_APPLICATION, NULL);
 -  gtkosx_application_set_use_quartz_accelerators(zathuraApp, FALSE);
@@ -198,4 +198,3 @@ index 7b085be..bbec9ea 100644
 +
    /* run zathura */
    gtk_main();
- 

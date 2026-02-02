@@ -1,8 +1,8 @@
 class ZathuraPs < Formula
   desc "Postscript backend plugin for zathura"
   homepage "https://pwmt.org/projects/zathura-ps/"
-  url "https://github.com/pwmt/zathura-ps/archive/refs/tags/0.2.8.tar.gz"
-  sha256 "b8b42c4517e4bdaee4c84c1c6e7298cabf00fc40b9b95f59feee0f61fe780b54"
+  url "https://github.com/pwmt/zathura-ps/archive/refs/tags/2026.01.30.tar.gz"
+  sha256 "b4c2b20749cdc08ac1399c9a2db052488aae0f007b1162af93ee48d18d82870e"
   license "Zlib"
 
   livecheck do

@@ -1,8 +1,8 @@
 class ZathuraDjvu < Formula
   desc "DJVU plugin for zathura"
   homepage "https://pwmt.org/projects/zathura-djvu/"
-  url "https://github.com/pwmt/zathura-djvu/archive/refs/tags/0.2.10.tar.gz"
-  sha256 "3749fe9da14c5cbd13598c83f2dbff9c1c1d906797139fc809ef256f8075c987"
+  url "https://github.com/pwmt/zathura-djvu/archive/refs/tags/2026.01.30.tar.gz"
+  sha256 "dbfc85bc31a9cae21f8157944d27a2119675ab52e6540e9f9b1506a9ed8a4dc9"
   license "Zlib"
 
   livecheck do

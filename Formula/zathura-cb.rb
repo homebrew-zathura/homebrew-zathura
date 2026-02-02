@@ -1,8 +1,8 @@
 class ZathuraCb < Formula
   desc "Comic book plugin for zathura"
   homepage "https://pwmt.org/projects/zathura-cb/"
-  url "https://github.com/pwmt/zathura-cb/archive/refs/tags/0.1.11.tar.gz"
-  sha256 "4159a84bbff021087e60fb82c62505e6db5c19aa9962edda39a4b11d00302f5d"
+  url "https://github.com/pwmt/zathura-cb/archive/refs/tags/2026.01.30.tar.gz"
+  sha256 "2f491ea06c63826e85f0ad44a083b5183343434361bf26309041b856983108b1"
   license "Zlib"
 
   livecheck do
