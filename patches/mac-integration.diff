@@ -178,7 +178,7 @@ index a439a78..7377272 100644
 
  #include <girara-gtk/settings.h>
 @@ -283,17 +283,9 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
-	 return -1;0
+	 return -1;
    }
 
 -#ifdef GTKOSXAPPLICATION
