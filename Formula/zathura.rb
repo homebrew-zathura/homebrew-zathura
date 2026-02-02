@@ -1,8 +1,8 @@
 class Zathura < Formula
   desc "PDF viewer"
   homepage "https://pwmt.org/projects/zathura/"
-  url "https://github.com/pwmt/zathura/archive/refs/tags/0.5.11.tar.gz"
-  sha256 "32540747a6fe3c4189ec9d5de46a455862c88e11e969adb5bc0ce8f9b25b52d4"
+  url "https://github.com/pwmt/zathura/archive/refs/tags/2026.01.30.tar.gz"
+  sha256 "4b76a3c5a0c68776364940acf5c744e57390bbfb5d5dd20317f075a9d1f32aa4"
   license "Zlib"
   head "https://github.com/pwmt/zathura.git", branch: "develop"
 
@@ -32,7 +32,7 @@ class Zathura < Formula
 
   patch do
     url "file://#{__dir__}/../patches/mac-integration.diff"
-    sha256 "68193fe28e5f085575bc91ce578a0ea08ed6f7aa9fe6490697bd3eb83bbe544f"
+    sha256 "de6cbf5b418e7bf0ea2d1c8c9b5c050d8d1d13a4f6371ae0d97cbd3ef446eda7"
   end
 
   def install
