@@ -57,6 +57,6 @@ class Zathura < Formula
     EOS
   end
   test do
-    system "true" # TODO
+    assert_match "zathura", shell_output("#{bin}/zathura --version")
   end
 end
