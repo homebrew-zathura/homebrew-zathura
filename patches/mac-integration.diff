@@ -3,7 +3,7 @@ index fe621cb..bbe9d07 100644
 --- a/data/zsh-completion.in
 +++ b/data/zsh-completion.in
 @@ -26,21 +26,21 @@ _arguments -C -s -S "$all_opts[@]" && ret=0
-
+ 
  local PLUGIN
  local -a exts
 -for PLUGIN in @PLUGINDIR@/lib*.so; do
@@ -31,13 +31,13 @@ index fe621cb..bbe9d07 100644
        ;;
    esac
 diff --git a/meson.build b/meson.build
-index 9d52fc8..4c30f4b 100644
+index eecb9c1..f2c9018 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -74,10 +74,6 @@ defines = [
    '-D_DEFAULT_SOURCE',
  ]
-
+ 
 -if host_machine.system() == 'darwin'
 -  defines += '-DGTKOSXAPPLICATION'
 -endif
@@ -45,15 +45,15 @@ index 9d52fc8..4c30f4b 100644
  # compile flags
  flags = [
    '-Werror=implicit-function-declaration',
-@@ -168,6 +164,15 @@ headers = files(
+@@ -156,6 +152,15 @@ headers = files(
  )
  headers += version_header
-
+ 
 +if host_machine.system() == 'darwin'
 +  sources += files(
 +    'zathura/mac-integration.c',
 +  )
-+  headers += files(
++  sources += files(
 +    'zathura/mac-integration.h',
 +  )
 +endif
@@ -164,23 +164,23 @@ index 0000000..07365e6
 +
 +#endif /* MAC_INTEGRATION_H */
 diff --git a/zathura/main.c b/zathura/main.c
-index a439a78..7377272 100644
+index 8f7b0d8..2f983c7 100644
 --- a/zathura/main.c
 +++ b/zathura/main.c
 @@ -1,7 +1,7 @@
  /* SPDX-License-Identifier: Zlib */
-
+ 
 -#ifdef GTKOSXAPPLICATION
 -#include <gtkosxapplication.h>
 +#ifdef MAC_INTEGRATION
 +#include "mac-integration.h"
  #endif
-
- #include <girara-gtk/settings.h>
-@@ -283,17 +283,9 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
-	 return -1;
+ 
+ #include <girara/settings.h>
+@@ -259,17 +259,9 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
+     return -1;
    }
-
+ 
 -#ifdef GTKOSXAPPLICATION
 -  GtkosxApplication* zathuraApp = g_object_new(GTKOSX_TYPE_APPLICATION, NULL);
 -  gtkosx_application_set_use_quartz_accelerators(zathuraApp, FALSE);
@@ -195,6 +195,6 @@ index a439a78..7377272 100644
 +#ifdef MAC_INTEGRATION
 +  zathura_mac_init(zathura);
 +#endif
-+
+ 
    /* run zathura */
    gtk_main();
