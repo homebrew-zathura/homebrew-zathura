@@ -31,7 +31,7 @@ index fe621cb..bbe9d07 100644
        ;;
    esac
 diff --git a/meson.build b/meson.build
-index eecb9c1..f2c9018 100644
+index eecb9c1..3675158 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -74,10 +74,6 @@ defines = [
@@ -53,7 +53,7 @@ index eecb9c1..f2c9018 100644
 +  sources += files(
 +    'zathura/mac-integration.c',
 +  )
-+  sources += files(
++  headers += files(
 +    'zathura/mac-integration.h',
 +  )
 +endif

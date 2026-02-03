@@ -32,7 +32,7 @@ class Zathura < Formula
 
   patch do
     url "file://#{__dir__}/../patches/mac-integration.diff"
-    sha256 "8c8b1546d18418c1c43579365bd810a022b30c655edc60364d1867ee4b3ba00f"
+    sha256 "9aa3ea2ab56724ffe9efa278eeb3a5a61b0ab8a53106cc51947a1a0492d269bc"
   end
 
   def install
