@@ -1,8 +1,8 @@
 class ZathuraPdfMupdf < Formula
   desc "MuPDF backend plugin for zathura"
   homepage "https://pwmt.org/projects/zathura-pdf-mupdf/"
-  url "https://github.com/pwmt/zathura-pdf-mupdf/archive/refs/tags/2026.01.30.tar.gz"
-  sha256 "b1ccc50a6932b07dad0d745ec66148979fe4dbce1761f55f38dbd0f6a12e6b2c"
+  url "https://github.com/pwmt/zathura-pdf-mupdf/archive/refs/tags/2026.02.03.tar.gz"
+  sha256 "0e718162054a0cd673bfa654f5d52ae03428665d154b00c897abf7014375bfff"
   license "Zlib"
 
   livecheck do

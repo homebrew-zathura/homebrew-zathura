@@ -1,8 +1,8 @@
 class ZathuraPdfPoppler < Formula
   desc "Poppler backend plugin for zathura"
   homepage "https://pwmt.org/projects/zathura-pdf-poppler/"
-  url "https://github.com/pwmt/zathura-pdf-poppler/archive/refs/tags/2026.01.30.tar.gz"
-  sha256 "e67b76c9f8130b9d6c61c51a10e1c52cc514f595eb7f363da75854d30e1c1791"
+  url "https://github.com/pwmt/zathura-pdf-poppler/archive/refs/tags/2026.02.03.tar.gz"
+  sha256 "959a657edcbce18ed19cde8ba0a60b9dabbb20c25051d557c598ab2527edcfc5"
   license "Zlib"
 
   livecheck do
