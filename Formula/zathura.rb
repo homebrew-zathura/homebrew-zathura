@@ -35,6 +35,19 @@ class Zathura < Formula
     sha256 "8c8b1546d18418c1c43579365bd810a022b30c655edc60364d1867ee4b3ba00f"
   end
 
+  on_macos do
+    option "with-no-titlebar", "Remove the title bar on macOS"
+
+    if build.with? "no-titlebar"
+      # Optionally remove the title bar on macOS with the "-T" or "--no-titlebar" arguments
+      patch do
+        url "file://#{__dir__}/../patches/no-titlebar.diff"
+        sha256 "c95c2ed65a412ab4199ef238ca1507a0988821596daaa00294bb27bd925dd6fe"
+      end
+    end
+    
+  end
+
   def install
     # Set Homebrew prefix
     ENV["PREFIX"] = prefix
