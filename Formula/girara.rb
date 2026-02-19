@@ -1,8 +1,8 @@
 class Girara < Formula
   desc "Interface library"
   homepage "https://pwmt.org/projects/girara/"
-  url "https://github.com/pwmt/girara/archive/refs/tags/2026.02.03.tar.gz"
-  sha256 "ccebf30c2a551f9e8f08e5e386c409aa5dfb75a8e2a19f75b36539e0a847eb74"
+  url "https://github.com/pwmt/girara/archive/refs/tags/2026.02.04.tar.gz"
+  sha256 "243622d5b0a6c9b0de09ba79239c94a297d42b10faa9ba1ca4f4d3e0b4acb770"
   license "Zlib"
   head "https://github.com/pwmt/girara.git", branch: "develop"
 
