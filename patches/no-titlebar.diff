@@ -1,0 +1,164 @@
+diff --git a/meson.build b/meson.build
+index b42ad22..18252b6 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,4 +1,4 @@
+-project('zathura', 'c',
++project('zathura', ['c', 'objc'],
+   version: '2026.02.03',
+   meson_version: '>=1.5',
+   default_options: ['c_std=c17', 'warning_level=3'],
+@@ -151,6 +151,7 @@ sources = files(
+   'zathura/types.c',
+   'zathura/utils.c',
+   'zathura/zathura.c',
++  'zathura/mac-titlebar.m',
+ )
+ sources += zathura_resources
+ 
+diff --git a/zathura/mac-titlebar.h b/zathura/mac-titlebar.h
+new file mode 100644
+index 0000000..2d2ab50
+--- /dev/null
++++ b/zathura/mac-titlebar.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: Zlib */
++
++#ifndef MAC_TITLEBAR_H
++#define MAC_TITLEBAR_H
++
++#ifdef GDK_WINDOWING_QUARTZ
++/**
++ * Setup macOS-specific window properties
++ *
++ * @param window The GTK window
++ */
++void setup_macos_window(GtkWindow *window);
++#endif
++
++#endif // MAC_TITLEBAR_H
+diff --git a/zathura/mac-titlebar.m b/zathura/mac-titlebar.m
+new file mode 100644
+index 0000000..9581c68
+--- /dev/null
++++ b/zathura/mac-titlebar.m
+@@ -0,0 +1,23 @@
++#include <gtk/gtk.h>
++#include <gdk/gdk.h>
++#include <gdk/gdkquartz.h>
++#import <AppKit/AppKit.h>
++#include "mac-titlebar.h"
++extern NSWindow *gdk_quartz_window_get_nswindow(GdkWindow *window);
++
++void setup_macos_window(GtkWindow *window) {
++    gtk_window_set_decorated(window, FALSE);
++
++    GdkWindow *gdk_window = gtk_widget_get_window(GTK_WIDGET(window));
++    NSWindow *ns_window = gdk_quartz_window_get_nswindow(gdk_window);
++
++    [ns_window setStyleMask:[ns_window styleMask] | NSWindowStyleMaskResizable ];
++    [ns_window setTitlebarAppearsTransparent:YES];
++    [ns_window setTitleVisibility:NSWindowTitleHidden];
++    [ns_window setMovableByWindowBackground:YES];
++
++    NSView *contentView = [ns_window contentView];
++    [contentView setWantsLayer:YES];
++    [[contentView layer] setCornerRadius:12.0];
++
++}
+diff --git a/zathura/main.c b/zathura/main.c
+index a439a78..41ade45 100644
+--- a/zathura/main.c
++++ b/zathura/main.c
+@@ -58,7 +58,8 @@ static int run_synctex_forward(const char* synctex_fwd, const char* filename, in
+ #endif
+ 
+ static zathura_t* init_zathura(const char* config_dir, const char* data_dir, const char* cache_dir,
+-                               const char* plugin_path, char** argv, const char* synctex_editor, Window embed) {
++                               const char* plugin_path, char** argv, const char* synctex_editor, Window embed,
++                               bool no_titlebar) {
+   /* create zathura session */
+   zathura_t* zathura = zathura_create();
+   if (zathura == NULL) {
+@@ -72,6 +73,8 @@ static zathura_t* init_zathura(const char* config_dir, const char* data_dir, con
+   zathura_set_plugin_dir(zathura, plugin_path);
+   zathura_set_argv(zathura, argv);
+ 
++  zathura->global.no_titlebar = no_titlebar;
++
+   /* Init zathura */
+   if (zathura_init(zathura) == false) {
+     zathura_free(zathura);
+@@ -103,6 +106,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
+   g_autofree gchar* search_string  = NULL;
+   gboolean forkback                = false;
+   gboolean print_version           = false;
++  gboolean no_titlebar             = false;
+   gint page_number                 = ZATHURA_PAGE_NUMBER_UNSPECIFIED;
+   gint synctex_pid                 = -1;
+   Window embed                     = 0;
+@@ -128,6 +132,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
+       {"bookmark", 'b', 0, G_OPTION_ARG_STRING, &bookmark_name, _("Bookmark to go to"), "bookmark"},
+       {"find", 'f', 0, G_OPTION_ARG_STRING, &search_string, _("Search for the given phrase and display results"),
+        "string"},
++      {"no-titlebar", 'T', 0, G_OPTION_ARG_NONE, &no_titlebar, _("Disable title bar on macOS"), NULL},
+       {NULL, '\0', 0, 0, NULL, NULL, NULL},
+   };
+ 
+@@ -263,7 +268,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
+ 
+   /* Create zathura session */
+   g_autoptr(zathura_t) zathura =
+-      init_zathura(config_dir, data_dir, cache_dir, plugin_path, argv, synctex_editor, embed);
++      init_zathura(config_dir, data_dir, cache_dir, plugin_path, argv, synctex_editor, embed, no_titlebar);
+   if (zathura == NULL) {
+     girara_error("Could not initialize zathura.");
+     return -1;
+diff --git a/zathura/zathura.c b/zathura/zathura.c
+index a754098..65516ac 100644
+--- a/zathura/zathura.c
++++ b/zathura/zathura.c
+@@ -22,6 +22,8 @@
+ #include <gdk/gdkwayland.h>
+ #endif
+ 
++#include "mac-titlebar.h"
++
+ #ifdef G_OS_UNIX
+ #include <glib-unix.h>
+ #include <gio/gunixinputstream.h>
+@@ -92,6 +94,7 @@ zathura_t* zathura_create(void) {
+   zathura->global.synctex_edit_modmask = GDK_CONTROL_MASK;
+   zathura->global.highlighter_modmask  = GDK_SHIFT_MASK;
+   zathura->global.double_click_follow  = true;
++  zathura->global.no_titlebar          = false;
+ 
+   /* initialize with default paths */
+   {
+@@ -220,7 +223,13 @@ static bool init_ui(zathura_t* zathura) {
+     girara_error("Failed to initialize girara.");
+     return false;
+   }
+-
++  
++  #ifdef GDK_WINDOWING_QUARTZ
++    if (zathura->global.no_titlebar) {
++      setup_macos_window(GTK_WINDOW(zathura->ui.session->gtk.window));
++    }
++  #endif
++  
+   /* girara events */
+   zathura->ui.session->events.buffer_changed  = cb_buffer_changed;
+   zathura->ui.session->events.unknown_command = cb_unknown_command;
+diff --git a/zathura/zathura.h b/zathura/zathura.h
+index 11b3101..2ff727c 100644
+--- a/zathura/zathura.h
++++ b/zathura/zathura.h
+@@ -147,6 +147,7 @@ struct zathura_s {
+     GdkModifierType synctex_edit_modmask; /**< Modifier to trigger synctex edit */
+     GdkModifierType highlighter_modmask;  /**< Modifier to draw with a highlighter */
+     bool double_click_follow;             /**< Double/Single click to follow link */
++    bool no_titlebar;                     /**< Disable title bar on macOS */
+     GtkTreePath* current_index_path;      /**< Current index path */
+   } global;
+ 
