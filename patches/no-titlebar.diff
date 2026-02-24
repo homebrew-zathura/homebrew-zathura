@@ -2,12 +2,9 @@ diff --git a/meson.build b/meson.build
 index b42ad22..18252b6 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -1,4 +1,4 @@
+@@ -1 +1 @@
 -project('zathura', 'c',
 +project('zathura', ['c', 'objc'],
-   version: '2026.02.03',
-   meson_version: '>=1.5',
-   default_options: ['c_std=c17', 'warning_level=3'],
 @@ -151,6 +151,7 @@ sources = files(
    'zathura/types.c',
    'zathura/utils.c',
@@ -161,4 +158,4 @@ index 11b3101..2ff727c 100644
 +    bool no_titlebar;                     /**< Disable title bar on macOS */
      GtkTreePath* current_index_path;      /**< Current index path */
    } global;
- 
+   

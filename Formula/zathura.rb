@@ -42,7 +42,7 @@ class Zathura < Formula
       # Optionally remove the title bar on macOS with the "-T" or "--no-titlebar" arguments
       patch do
         url "file://#{__dir__}/../patches/no-titlebar.diff"
-        sha256 "c95c2ed65a412ab4199ef238ca1507a0988821596daaa00294bb27bd925dd6fe"
+        sha256 "5243224b088bcbac7bfce93322d58b8bd23a6d4011d9395040ed1f897ae569ad"
       end
     end
     
