@@ -12,6 +12,7 @@ class Synctex < Formula
     regex(/^(\d{4})$/i)
   end
 
+  depends_on "pkgconf" => :test
   depends_on "zlib"
 
   def install
@@ -33,10 +34,10 @@ includedir=#{include}
 
 Name: synctex
 Description: SyncTeX parser library
-Version: 1.21.0
+Version: 2.0.0
 Requires.private: zlib
 Libs: -L${libdir} -lsynctex
-Cflags: -I${includedir}/synctex"
+Cflags: -I${includedir}"
     end
 
     mkdir "#{lib}/pkgconfig"
@@ -44,6 +45,23 @@ Cflags: -I${includedir}/synctex"
   end
 
   test do
-    system "true" # TODO
+    system "pkgconf", "--atleast-version=2", "synctex"
+    assert_match "-I#{include}", shell_output("pkgconf --cflags synctex")
+
+    (testpath/"test.c").write <<~C
+      #include <stddef.h>
+      #include <synctex/synctex_parser.h>
+
+      int main(void) {
+        synctex_scanner_p scanner = synctex_scanner_new_with_output_file("missing.pdf", NULL, 1);
+        if (scanner != NULL) {
+          synctex_scanner_free(scanner);
+        }
+        return 0;
+      }
+    C
+
+    flags = shell_output("pkgconf --cflags synctex").split
+    system ENV.cc, "test.c", *flags, "-c", "-o", "test.o"
   end
 end
