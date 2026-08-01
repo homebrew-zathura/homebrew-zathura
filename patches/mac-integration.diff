@@ -31,7 +31,7 @@ index fe621cb..bbe9d07 100644
        ;;
    esac
 diff --git a/meson.build b/meson.build
-index 65a9194..ccd26f8 100644
+index 65a9194..d5b8eaa 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -57,6 +57,7 @@ sqlite = dependency('sqlite3', version: '>=3.6.23')
@@ -60,9 +60,9 @@ index 65a9194..ccd26f8 100644
 +if host_machine.system() == 'darwin'
 +  sources += files(
 +    'zathura/mac-integration.c',
-+  )
-+  sources += files(
 +    'zathura/mac-integration.h',
++    'zathura/mac-window.m',
++    'zathura/mac-window.h',
 +  )
 +endif
 +
@@ -171,6 +171,63 @@ index 0000000..07365e6
 +void zathura_mac_init(zathura_t* zathura);
 +
 +#endif /* MAC_INTEGRATION_H */
+diff --git a/zathura/mac-window.h b/zathura/mac-window.h
+new file mode 100644
+index 0000000..a841ddf
+--- /dev/null
++++ b/zathura/mac-window.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: Zlib */
++
++#ifndef MAC_WINDOW_H
++#define MAC_WINDOW_H
++
++#include <gtk/gtk.h>
++
++#ifdef GDK_WINDOWING_QUARTZ
++/**
++ * Set up macOS-specific window properties.
++ *
++ * @param window The GTK window
++ */
++void zathura_macos_set_window_background(GtkWindow* window);
++#endif
++
++#endif /* MAC_WINDOW_H */
+diff --git a/zathura/mac-window.m b/zathura/mac-window.m
+new file mode 100644
+index 0000000..91cf3da
+--- /dev/null
++++ b/zathura/mac-window.m
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: Zlib */
++
++#include <gdk/gdkquartz.h>
++#include <gtk/gtk.h>
++#import <AppKit/AppKit.h>
++
++#include "mac-window.h"
++
++extern NSWindow* gdk_quartz_window_get_nswindow(GdkWindow* window);
++
++void zathura_macos_set_window_background(GtkWindow* window) {
++  if (window == NULL) {
++    return;
++  }
++
++  GdkWindow* gdk_window = gtk_widget_get_window(GTK_WIDGET(window));
++  if (gdk_window == NULL) {
++    return;
++  }
++
++  NSWindow* ns_window = gdk_quartz_window_get_nswindow(gdk_window);
++  if (ns_window == nil) {
++    return;
++  }
++
++  /* GTK uses a clear NSWindow background for client-side decorations. */
++  [ns_window setBackgroundColor:[NSColor windowBackgroundColor]];
++}
 diff --git a/zathura/main.c b/zathura/main.c
 index a439a78..7377272 100644
 --- a/zathura/main.c
@@ -206,3 +263,26 @@ index a439a78..7377272 100644
  
    /* run zathura */
    gtk_main();
+diff --git a/zathura/zathura.c b/zathura/zathura.c
+index e10e0bc..3ffb80b 100644
+--- a/zathura/zathura.c
++++ b/zathura/zathura.c
+@@ -41,6 +41,7 @@
+ #include "zathura.h"
+ #include "utils.h"
+ #include "marks.h"
++#include "mac-window.h"
+ #include "render.h"
+ #include "page.h"
+ #include "page-widget.h"
+@@ -221,6 +222,10 @@ static bool init_ui(zathura_t* zathura) {
+     return false;
+   }
+ 
++#ifdef GDK_WINDOWING_QUARTZ
++  zathura_macos_set_window_background(GTK_WINDOW(zathura->ui.session->gtk.window));
++#endif
++
+   /* girara events */
+   zathura->ui.session->events.buffer_changed  = cb_buffer_changed;
+   zathura->ui.session->events.unknown_command = cb_unknown_command;
