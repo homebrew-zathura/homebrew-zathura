@@ -1,11 +1,8 @@
 diff --git a/meson.build b/meson.build
-index b42ad22..18252b6 100644
+index 65a9194..c0ee3d7 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -1 +1 @@
--project('zathura', 'c',
-+project('zathura', ['c', 'objc'],
-@@ -151,6 +151,7 @@ sources = files(
+@@ -150,6 +150,7 @@ sources = files(
    'zathura/types.c',
    'zathura/utils.c',
    'zathura/zathura.c',
@@ -112,7 +109,7 @@ index a439a78..41ade45 100644
      girara_error("Could not initialize zathura.");
      return -1;
 diff --git a/zathura/zathura.c b/zathura/zathura.c
-index a754098..65516ac 100644
+index e10e0bc..fc154ea 100644
 --- a/zathura/zathura.c
 +++ b/zathura/zathura.c
 @@ -22,6 +22,8 @@
@@ -132,30 +129,28 @@ index a754098..65516ac 100644
  
    /* initialize with default paths */
    {
-@@ -220,7 +223,13 @@ static bool init_ui(zathura_t* zathura) {
-     girara_error("Failed to initialize girara.");
-     return false;
-   }
--
-+  
-+  #ifdef GDK_WINDOWING_QUARTZ
-+    if (zathura->global.no_titlebar) {
-+      setup_macos_window(GTK_WINDOW(zathura->ui.session->gtk.window));
-+    }
-+  #endif
-+  
-   /* girara events */
+@@ -225,6 +228,12 @@ static bool init_ui(zathura_t* zathura) {
    zathura->ui.session->events.buffer_changed  = cb_buffer_changed;
    zathura->ui.session->events.unknown_command = cb_unknown_command;
+ 
++#ifdef GDK_WINDOWING_QUARTZ
++  if (zathura->global.no_titlebar) {
++    setup_macos_window(GTK_WINDOW(zathura->ui.session->gtk.window));
++  }
++#endif
++
+   /* gestures */
+ 
+   GtkGesture* zoom = gtk_gesture_zoom_new(GTK_WIDGET(zathura->ui.session->gtk.view));
 diff --git a/zathura/zathura.h b/zathura/zathura.h
-index 11b3101..2ff727c 100644
+index 3dd93b7..631e5aa 100644
 --- a/zathura/zathura.h
 +++ b/zathura/zathura.h
-@@ -147,6 +147,7 @@ struct zathura_s {
+@@ -149,6 +149,7 @@ struct zathura_s {
      GdkModifierType synctex_edit_modmask; /**< Modifier to trigger synctex edit */
      GdkModifierType highlighter_modmask;  /**< Modifier to draw with a highlighter */
      bool double_click_follow;             /**< Double/Single click to follow link */
 +    bool no_titlebar;                     /**< Disable title bar on macOS */
      GtkTreePath* current_index_path;      /**< Current index path */
    } global;
-   
+ 
