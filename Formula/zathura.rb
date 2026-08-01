@@ -11,6 +11,8 @@ class Zathura < Formula
     regex(/^v?(\d+(?:\.\d+)+)$/i)
   end
 
+  option "with-no-titlebar", "Remove the title bar on macOS"
+
   depends_on "cmake" => :build
   depends_on "meson" => :build
   depends_on "ninja" => :build
@@ -28,24 +30,19 @@ class Zathura < Formula
   on_macos do
     depends_on "gtk+3"
     depends_on "gtk-mac-integration"
-  end
-
-  patch do
-    url "file://#{__dir__}/../patches/mac-integration.diff"
-    sha256 "8c8b1546d18418c1c43579365bd810a022b30c655edc60364d1867ee4b3ba00f"
-  end
-
-  on_macos do
-    option "with-no-titlebar", "Remove the title bar on macOS"
 
     if build.with? "no-titlebar"
       # Optionally remove the title bar on macOS with the "-T" or "--no-titlebar" arguments
       patch do
         url "file://#{__dir__}/../patches/no-titlebar.diff"
-        sha256 "5243224b088bcbac7bfce93322d58b8bd23a6d4011d9395040ed1f897ae569ad"
+        sha256 "2cbe0a3ec8c9baf675c44f460df192436367e6ad984c58c53d1266d69664e197"
       end
     end
-    
+  end
+
+  patch do
+    url "file://#{__dir__}/../patches/mac-integration.diff"
+    sha256 "01cc955bed34aa98d46d9e8939cb38ae924ee263a0a12d68716d9ebbd3b6fed3"
   end
 
   def install
